@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Data Vis Analysis{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <H1>Data Vis Analysis</H1>
+            <p>
+                <h2>CMT218 Data Analysis and Visualisation Creation </h2>
+                <h3>Data Visualisation Analysis and Discussion</h3>
+
+                <br><br>
+
+                <h3><strong>My message is:</strong>
+                    “Helping UFC fans find insight and meaning by comparing and contrasting data from the best UFC fighters for deeper engagement with the sport.”
+                </h3>
+                <br>
+                <br>
+                <h4>
+                    <strong>Data Fighter V1 design process: the ‘why’</strong>
+                    <br>
+                    As an MMA enthusiast and practitioner, I set out to create a UFC fighter statistics data visualisation project for fans and satisfy their data needs (Iliinsky, N. and Steele, J. (2011)). I sourced my dataset from Kaggle (Aggarwal, K. (2018)) for its up-to-date, mostly clean, and well-organized data spanning 1996-2024. Cleaning the headers for better readability and intuitiveness was crucial (Chai, C.P. (2020)), although the extensive dataset also posed challenges of either oversimplification or overwhelming detail with 2500 rows.
+                    <br><br>
+                    Recognizing that the majority of UFC viewers focus on the top male fighters based on PPV information (Davies, B. (2023)), I filtered the data accordingly, acknowledging the sexist bias this introduced and aiming to rectify it in Version 2. 
+                    <br><br>
+                    I formulated three assumptions for guiding my design choices and inferred from them to help me tell a story (Duarte, N. (2019)). This is the ‘why’ behind my data dashboard:
+                    <br>
+                    <br>
+                    <strong>Assumption 1: </strong>
+                    <br>
+                    I looked at the data and decided having ways to group and categorise would help the TA find the data visualisations more meaningful and insightful. This is because it helps align the question (my message), data (by narrowing the focus of what data is ‘speaking’) and visualisation (by not cluttering the charts and enhancing clarity) (Kaiser, F. (2014)). This meant rendering the data dynamically would be best.
+                    <br><br>
+                    <strong>Inferred design choice: grouping and categorizing data for user insight</strong>
+                    <br>
+                    I chose a web app data dashboard to increase user interactivity and useability, with data filtering and rendering capabilities.
+                    <br>
+                    To assist user insight, I used fighter weight class based data grouping to make the data more interpretable: offensive data (when a fighter was attacking), defensive data (when a fighter was being attacked or defending) and body data (stats about the physical make-up of the fighter). A data design choice I made was that as weight is generally consistent across a weight class this was of lesser importance to the TA. 
+                    <br><br>
+                    I grouped headers into these thematic areas on the weight class and data fighter pages to visually link them and assist users page navigation and data interpretation (Muth, L.C. (2020)).
+                    <br>
+                    <br>
+                    <strong>Assumption 2:</strong>
+                    <br>
+                    UFC fans enjoy the fast-paced dopamine rich experiences of fights so they would most likely want to be able to quickly gain insight from the data with minimal effort (Cools, R. (2019)).
+                    <br><br>
+                    <strong>Inferred design choice: prioritizing quick and effortless data interpretation</strong>
+                    <br>
+                    These assumptions led to me designing a web app dashboard with filtering capabilities and a minimalist layout for enhanced user experience using iterative wireframe development and implementation (Gould, J.D. and Lewis, C. (1985)).
+                    <br>
+                    I present the data in simple, clean and clear charts (Meeks, E. (2015)) like bar charts, plot charts and pie charts (for data types with two categories). These chart types are chosen as they are well known and easily interpretable, whereas charts like violin and box plots may require learning and so a barrier to entry for UFC fans. The high contrast colours and black font on white background labels were visual encoding choices for maximum legibility and to make sure users can easily, accurately and correctly interpret the data (Healey, C.G. (2022)).
+                    <br><br>
+                    Despite my efforts and design choices some of the font sizes and text can be too small and congested in places which limits interpretation. An important improvement for V2.
+                    <br>
+                    <br>
+                    <strong>Assumption 3: </strong>
+                    <br>
+                    The most watched UFC fights feature top contenders (those ranked highest in a weight class) (Davies, B. (2023)) so users will have the greatest interest in their data.
+                    <br><br>
+                    <strong>Inferred design choice: emphasizing top contenders for user engagement</strong>
+                    <br>
+                    Because of this I gave the option to filter by the top 5 or 10 contenders in a weight class (dynamically updating the data dashboard), so users could focus on what interests them most. I also gave an option to ‘Data Fight’ by comparing 2 fighters in a weight class because a UFC fight is 1 v 1, not an entire weight class, and direct comparison can create greater insight and clarity. I chose these features because they are novel and help to deliver the user message (Duarte, N. (2019)).
+                    <br>
+                    <br>
+                    <strong>Conclusion:</strong>
+                    <br>
+                    The dashboard charts employ simple, clear designs with high contrast and generally legible labelling (Meirelles, I. (2013) ). However, issues like small font sizes and congested text in the age bar chart hamper readability and interpretation. Another issue is mixing data types like percentages and incremental numbers on charts that don’t start from zero may confuse users and reduce readability. This highlights improvements in labelling for enhanced user experience and engagement in Version 2.
+                    <br><br>
+                    Future versions could also expand their scope by adding filters for year and addressing sexist biases by including female fighters. Despite my belief in equality and inclusion in sports, time constraints and complexity led me to prioritize data filters relevant to the majority of UFC fans. I will address these issues if Version 2 is developed.
+                    <br>
+                    Overall, the dashboard provides valuable insights into UFC data, meeting my goal of providing UFC fans with a valuable tool for exploring fighter statistics.
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <strong>References:</strong>
+                    <br>
+                    Aggarwal, K. (2018) UFC Fight Data, Kaggle. Available at: https://www.kaggle.com/datasets/calmdownkarm/ufcdataset (Accessed: 29 April 2024). 
+                    <br><br>
+                    Chai, C.P. (2020) 'The Importance of Data Cleaning: Three Visualization Examples', Chance, 33(1), pp. 4-9. doi:10.1007/144.1867-2280. 
+                    <br><br>
+                    Cools, R. (2019) 'Chemistry of the adaptive mind: Lessons from dopamine', Neuron, 104(1), pp. 113-131. doi:10.1016/j.neuron.2019.09.035. 
+                    <br><br>
+                    Davies, B. (2023) The 10 highest-earning PPV events in UFC history have been ranked, GiveMeSport. Available at: https://www.givemesport.com/biggest-earning-ufc-ppv-events-in-history-ranked/ (Accessed: 29 April 2024). 
+                    <br><br>
+                    Duarte, N. (2019) Data story: Explain data and inspire action through story. Erscheinungsort nicht ermittelbar: Ideapress Publishing. 
+                    <br><br>
+                    Gould, J.D. and Lewis, C. (1985) 'Designing for usability:  key principles and what Designers think', Communications of the ACM, 28(3), pp. 300-311. doi:10.1145/3166.3170. 
+                    <br><br>
+                    Healey, C.G. (2022) Perception in visualization. Available at: https://www.csc2.ncsu.edu/faculty/healey/PP/index.html (Accessed: 29 April 2024). 
+                    <br><br>
+                    Iliinsky, N. and Steele, J. (2011) Designing data visualizations: Representing information on modern web. Sebastopol, CA: O'Reilly Media.
+                    <br><br>
+                    Kaiser, F. (2014) 'Junk Charts Trifecta Checkup: The Definitive Guide', Junk Charts, 26 May. Available at: https://junkcharts.typepad.com/junk_charts/junk-charts-trifecta-checkup-the-definitive-guide.html (Accessed: 03 March 2024). 
+                    <br><br>
+                    Meeks, E. (2015) 'The importance of data visualization', Journal of Statistics Education, 23(2), pp. 1-2. doi:10.1080/144.1067.1069.
+                    <br><br>
+                    Meirelles, I. (2013) Design for information: An introduction to the histories, theories, and best practices behind effective information visualizations. Beverly: Rockport. 
+                    <br><br>
+                    Muth, L.C. (2020) What to consider when considering data vis rules, Lisa Charlotte Muth. Available at: https://lisacharlottemuth.com/datavisrules (Accessed: 29 April 2024). 
+                    <br>
+                    <br>
+                </h4>
+
+
+
+
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

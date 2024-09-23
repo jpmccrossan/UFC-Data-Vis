@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1 class="text-center"> Martins-Cool-Data-Vis-Website</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2>UFC Data Fighter V1</h2>
+                <p>Hello Data geeks and UFC fans! -Anyone- or just me me??<br>
+                     If you’re here a warm welcome is extended to you on this latest installation of Martins-Cool-Data-Vis-Website!! (Cooooooolio) <br><br>
+                    
+                    This data vis is a web application that uses UFC Fighter Data from:
+                    <a href="https://www.kaggle.com/datasets/maksbasher/ufc-complete-dataset-all-events-1996-2024">Kaggle  UFC Data</a>
+                    to create a data dashboard. <br><br>
+                    Depending on if you select a weight class or 2 fighters from a weight class, it populates differently following the same basic format for the dashboard like weight, stance and rank. Enjoy exploring, and check out the article in the navbar for more info and an analysis!
+                    </p>
+             </div>
+        </div>
+
+        <br>
+
+        <div class="row-center">
+            <h2>Getting Started</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                <h5 class="card-title">Weight Classes</h5>
+                <a href="/weight_class" class="btn btn-outline-success btn-center">Select</a>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col">
+                <h2>Features</h2>
+                <ul>
+                    <li>Select fighters from the same weight class and compare their statistics side by side.</li>
+                    <li>View the statistics for fighters in each weight class.</li>
+                    <li>View detailed information about individual fighters, including their age, stance, and ranking in their weight class.</li>
+                    <li>Read an analysis of my Data Vis!</li>
+                </ul>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col">
+                <h2>Technologies Used</h2>
+                <ul>
+                    <li>Python</li>
+                    <li>Flask</li>
+                    <li>SQLite</li>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+            </div>
+
+{% endblock %}

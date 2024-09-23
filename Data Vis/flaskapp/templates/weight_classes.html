@@ -1,0 +1,38 @@
+<!-- weight_classes.html -->
+{% extends "base.html" %}
+
+{% block title %}Weight Classes{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1>Weight Classes</h1>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for weight in weights %}
+                <div class="col">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ weight }}</h5>
+                            <!-- Use an anchor tag to redirect to /fighters_in_weight_class route -->
+                            <a href="/weight_class_data?weight={{ weight }}" class="btn btn-outline-success btn-center">View Data</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Sort the weight classes in ascending order using average weight, from low to high
+    
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+

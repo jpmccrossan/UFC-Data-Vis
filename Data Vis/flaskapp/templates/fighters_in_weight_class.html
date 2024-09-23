@@ -1,0 +1,102 @@
+<!-- fighters_in_weight_class.html -->
+{% extends "base.html" %}
+
+{% block title %}Fighters in Weight Class{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Fighters in Weight Class: {{ weight }}</h1>
+    <h2>Select your 2 fighters:</h2>
+    <form id="fighterForm" action="/compare_fighters" method="post">
+        <div class="row">
+            {% if fighters_names and fighters_ranks %}
+                {% for index in range(fighters_names|length) %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            {% if fighters_names[index] is defined and fighters_ranks[index] is defined %}
+                                <h5 class="card-title">{{ fighters_names[index]['Name'] }}</h5>
+                                <p class="card-text">Ranked: {{ fighters_ranks[index]['Rank'] + 1 }}</p>  <!-- Adding 1 to start rank from 1 -->
+                                <!-- Checkbox Group -->
+                                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                                    <input type="checkbox" class="btn-check fighter1-checkbox" id="fighter1_{{ index }}" name="fighter1Checkbox" value="{{ fighters_names[index]['Name'] }}" autocomplete="off">
+                                    <label class="btn btn-outline-success btn-center fighter-label" for="fighter1_{{ index }}">Fighter 1</label>
+                                    
+                                    <input type="checkbox" class="btn-check fighter2-checkbox" id="fighter2_{{ index }}" name="fighter2Checkbox" value="{{ fighters_names[index]['Name'] }}" autocomplete="off">
+                                    <label class="btn btn-outline-success btn-center fighter-label" for="fighter2_{{ index }}">Fighter 2</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No fighters available.</p>
+            {% endif %}
+        </div>
+        <div id="error-message" class="text-danger {% if not fighters_names %}d-block{% else %}d-none{% endif %}">Please select exactly one fighter 1 and one fighter 2.</div>
+        <div class="text-center">
+            <button type="submit" id="compare-btn" class="btn btn-outline-success mt-3" disabled><h1>Data Fight!</h1></button>
+        </div>
+    </form>
+</div>
+
+<br>
+<br>
+<br>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const fighter1Checkboxes = document.querySelectorAll('.fighter1-checkbox');
+    const fighter2Checkboxes = document.querySelectorAll('.fighter2-checkbox');
+    const compareButton = document.getElementById('compare-btn');
+    const errorMessage = document.getElementById('error-message');
+    
+    function updateButtonState() {
+        const fighter1Selected = [...fighter1Checkboxes].some(checkbox => checkbox.checked);
+        const fighter2Selected = [...fighter2Checkboxes].some(checkbox => checkbox.checked);
+        
+        console.log("Fighter 1 selected:", fighter1Selected);
+        console.log("Fighter 2 selected:", fighter2Selected);
+        
+        if (fighter1Selected && fighter2Selected) {
+            compareButton.disabled = false;
+            errorMessage.style.display = 'none';
+        } else {
+            compareButton.disabled = true;
+            errorMessage.style.display = 'block';
+        }
+    }
+
+    fighter1Checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                fighter1Checkboxes.forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+                // Deselect corresponding fighter 2 checkbox
+                const correspondingCheckbox = document.getElementById('fighter2_' + this.id.split('_')[1]);
+                correspondingCheckbox.checked = false;
+            }
+            updateButtonState();
+        });
+    });
+
+    fighter2Checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                fighter2Checkboxes.forEach(cb => {
+                    if (cb !== this) cb.checked = false;
+                });
+                // Deselect corresponding fighter 1 checkbox
+                const correspondingCheckbox = document.getElementById('fighter1_' + this.id.split('_')[1]);
+                correspondingCheckbox.checked = false;
+            }
+            updateButtonState();
+        });
+    });
+});
+
+</script>
+
+{% endblock %}

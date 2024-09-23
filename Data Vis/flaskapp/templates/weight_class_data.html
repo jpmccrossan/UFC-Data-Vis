@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}Weight Class Data{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1>{{ weight }} Division Data</h1>
+        <div class="col-8">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">{{ weight }} Data Fight:</h5>
+                    <select id="selectNumFighters" class="form-select" onchange="updateCharts()">
+                        <option value="16">All Fighters</option>
+                        <option value="10">Top 10 Fighters</option>
+                        <option value="5">Top 5 Fighters</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <h3>Data Fighter</h3>
+                    <a href="/fighters_in_weight_class?weight={{ weight }}" class="btn btn-outline-success btn-center">Select 2 {{ weight }} Fighters!</a>
+                </div>
+            </div>   
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <h3 class="card-title">Average Stats in {{ weight }}</h3>
+                    <div id="averageStats"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+
+<div class="container">
+    <h2>{{ weight }} Data Overview</h2>
+    <div class="row">
+        <div class="col-4">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <p>{{ weight }} Average Wins and losses</p>
+                    <div id="averageWinAndLossesPieChart"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <p>{{ weight }} Age and Rank</p>
+                    <div id="ageAndRankBarChart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div id="heightAndReachScatterplot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <h1>{{ weight }} Fighters' Offensive Data</h1>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div id="sigStrikeAndAccurScatterplot"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div id="takdownAvAndAccScatterplot"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="container">
+    <div class="row">
+        <h1>{{ weight }} Fighters' Defensive Data</h1>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div id="strikesAbAndStrikeDefScatterplot"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div id="takedownsDefAndNameBarChart">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<br>
+
+<script>
+    var fighter_stats_for_charts = [
+    {% for fighter in fighters_stats %}
+    {
+        name: '{{ fighter["Name"] }}',
+        stance: '{{ fighter["Stance"] }}',
+        weight_class: '{{ fighter["Weight_Class"] }}',
+        rank: '{{ fighter["Rank_In_Weight_Class"] + 1 }}',
+
+        significant_strike_accuracy: {{ fighter["Significant_Strike_Accuracy"] }},
+        strikes_defended: {{ fighter["Strikes_Defended"] }},
+
+        takedown_accuracy: {{ fighter["Takedown_Accuracy"] }},
+        takedowns_defended: {{ fighter["Takedowns_Defended"] }},
+
+        wins: {{ fighter["Wins"] }},
+        losses: {{ fighter["Losses"] }},
+
+        age: {{ fighter["Age"] }},
+        height: {{ fighter["Height"] }},
+        weight: {{ fighter["Weight"] }},
+        reach: {{ fighter["Reach"] }},
+
+        strikes_landed_per_minute: {{ fighter["Strikes_Landed_Per_Minute"] }},
+        strikes_absorbed_per_minute: {{ fighter["Strikes_Absorbed_Per_Minute"] }},
+        takedown_average: {{ fighter["Takedown_Average"] }},
+        submission_average: {{ fighter["Submission_Average"] }}
+    },
+    {% endfor %}
+    ];
+
+    function updateCharts() {
+        var numFighters = document.getElementById("selectNumFighters").value;
+        var filtered_data = fighter_stats_for_charts.slice(0, numFighters);
+ 
+        // Update the bar chart with filtered data wins and losses
+        updateAverageStats(filtered_data);
+        updateAgeAndRankBarChart(filtered_data);
+        updateAveragePieChart(filtered_data);
+        updateHeightAndReachScatterPlot(filtered_data);
+        updateSigStrikeAndAccurScatterplot(filtered_data);
+        updateTakdownAvAndAccScatterplot(filtered_data);
+        updatestrikesAbAndStrikeDefScatterplot(filtered_data);
+        updateTakedownsDefAndNameBarChart(filtered_data);
+    }
+
+    function updateAverageStats(filtered_data) {
+        var totalWins = filtered_data.reduce((acc, fighter) => acc + fighter.wins, 0);
+        var totalLosses = filtered_data.reduce((acc, fighter) => acc + fighter.losses, 0);
+        var totalAge = filtered_data.reduce((acc, fighter) => acc + fighter.age, 0);
+        var totalHeight = filtered_data.reduce((acc, fighter) => acc + fighter.height, 0);
+        var totalReach = filtered_data.reduce((acc, fighter) => acc + fighter.reach, 0);
+        var totalWeight = filtered_data.reduce((acc, fighter) => acc + fighter.weight, 0);
+        
+        var averageWins = totalWins / filtered_data.length;
+        var averageLosses = totalLosses / filtered_data.length;
+        var averageAge = totalAge / filtered_data.length;
+        var averageHeight = totalHeight / filtered_data.length;
+        var averageReach = totalReach / filtered_data.length;
+        var averageWeight = totalWeight / filtered_data.length;
+
+        document.getElementById("averageStats").innerHTML = "Wins: " + averageWins.toFixed(2) + " | Losses: " + averageLosses.toFixed(2) + " | Age: " + averageAge.toFixed(2) + " | Height: " + averageHeight.toFixed(2) + " | Reach: " + averageReach.toFixed(2) + " | Weight: " + averageWeight.toFixed(2);
+    }
+
+    function updateAveragePieChart(filtered_data) {
+
+        var averageWins = filtered_data.reduce((acc, fighter) => acc + fighter.wins, 0) / filtered_data.length;
+        var averageLosses = filtered_data.reduce((acc, fighter) => acc + fighter.losses, 0) / filtered_data.length;
+        
+        var data = [{
+            // Average wins and losses from filtered data
+            values: [averageWins, averageLosses],
+            labels: ['Wins', 'Losses'],
+            type: 'pie',
+        }];
+        
+
+        Plotly.newPlot('averageWinAndLossesPieChart', data);
+    }
+
+
+    function updateAgeAndRankBarChart(filtered_data) { // Receive filtered data as parameter
+        var barData = [{
+            x: filtered_data.map(fighter => fighter.rank + ": " + fighter.name),
+            y: filtered_data.map(fighter => fighter.age),
+            type: 'bar'
+        }];
+
+        var layout = {
+            xaxis: {
+                title: 'Rank: Name',
+                tickangle: -25,
+                automargin: true, // Automatically adjust margin
+            },
+            yaxis: {
+                title: 'Age',
+                automargin: true, // Automatically adjust margin
+            }
+        };
+
+        Plotly.newPlot('ageAndRankBarChart', barData, layout);
+    }
+
+    function updateHeightAndReachScatterPlot(filtered_data) {
+        var trace = filtered_data.map(fighter => ({
+            x: [fighter.reach],
+            y: [fighter.height],
+            mode: 'markers',
+            type: 'scatter',
+            name: fighter.rank + ": " + fighter.name,
+            text: fighter.name,
+            marker: {
+                size: 20,
+                opacity: 0.7
+            },
+            legendgroup: fighter.name,
+            showlegend: true
+        }));
+
+        var layout = {
+            title: "Fighters' Height and Reach",
+            xaxis: { title: 'Reach in cm' },
+            yaxis: { title: 'Height in cm' },
+            showlegend: true,
+            legend: {
+                title: {
+                    text: 'Fighters Names',
+                    font: {
+                        size: 16,
+                        color: 'black'
+                    }
+                },
+                itemsizing: 'constant',
+                itemclick: false,
+                itemdoubleclick: false,
+                tracegroupgap: 10,
+                traceorder: 'normal',
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 12,
+                    color: '#000'
+                },
+                bgcolor: '#E2E2E2'
+            }
+        };
+
+        Plotly.newPlot('heightAndReachScatterplot', trace, layout);
+    }
+
+    function updateSigStrikeAndAccurScatterplot(filtered_data) {
+        var trace = filtered_data.map(fighter => ({
+            x: [fighter.significant_strike_accuracy],
+            y: [fighter.strikes_landed_per_minute],
+            mode: 'markers',
+            type: 'scatter',
+            name: fighter.rank + ": " + fighter.name,
+            text: fighter.name,
+            marker: {
+                size: 20,
+                opacity: 0.7
+            },
+            legendgroup: fighter.name,
+            showlegend: true
+        }));
+
+        var layout = {
+            title: "Strikes Landed/Min & Signif Strike Accuracy",
+            xaxis: { title: 'Significant Strike Accuracy (%)' },
+            yaxis: { title: 'Average Number of Strikes Landed/Min' },
+            showlegend: true,
+            legend: {
+                title: {
+                    text: 'Fighters Names',
+                    font: {
+                        size: 16,
+                        color: 'black'
+                    }
+                },
+                itemsizing: 'constant',
+                itemclick: false,
+                itemdoubleclick: false,
+                tracegroupgap: 10,
+                traceorder: 'normal',
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 12,
+                    color: '#000'
+                },
+                bgcolor: '#E2E2E2'
+            }
+        };
+
+        Plotly.newPlot('sigStrikeAndAccurScatterplot', trace, layout);
+    }
+
+    function updateTakdownAvAndAccScatterplot(filtered_data) {
+        var trace = filtered_data.map(fighter => ({
+            x: [fighter.takedown_accuracy],
+            y: [fighter.takedown_average],
+            mode: 'markers',
+            type: 'scatter',
+            name: fighter.rank + ": " + fighter.name,
+            text: fighter.name,
+            marker: {
+                size: 20,
+                opacity: 0.7
+            },
+            legendgroup: fighter.name,
+            showlegend: true
+        }));
+
+        var layout = {
+            title: "Takedown Average and Takedown Accuracy",
+            xaxis: { title: 'Takedown Accuracy (%)' },
+            yaxis: { title: 'Takedown Average Per Fight' },
+            showlegend: true,
+            legend: {
+                title: {
+                    text: 'Fighters Names',
+                    font: {
+                        size: 16,
+                        color: 'black'
+                    }
+                },
+                itemsizing: 'constant',
+                itemclick: false,
+                itemdoubleclick: false,
+                tracegroupgap: 10,
+                traceorder: 'normal',
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 12,
+                    color: '#000'
+                },
+                bgcolor: '#E2E2E2'
+            }
+        };
+
+        Plotly.newPlot('takdownAvAndAccScatterplot', trace, layout);
+    }
+
+    function updatestrikesAbAndStrikeDefScatterplot(filtered_data) {
+        var trace = filtered_data.map(fighter => ({
+            x: [fighter.strikes_defended],
+            y: [fighter.strikes_absorbed_per_minute],
+            mode: 'markers',
+            type: 'scatter',
+            name: fighter.rank + ": " + fighter.name,
+            text: fighter.name,
+            marker: {
+                size: 20,
+                opacity: 0.7
+            },
+            legendgroup: fighter.name,
+            showlegend: true
+        }));
+
+        var layout = {
+            title: "Strikes Absorbed per Minute and Strikes Defended",
+            xaxis: { title: 'Strikes Defended (%)' },
+            yaxis: { title: 'Strikes Absorbed per Minute' },
+            showlegend: true,
+            legend: {
+                title: {
+                    text: 'Fighters Names',
+                    font: {
+                        size: 16,
+                        color: 'black'
+                    }
+                },
+                itemsizing: 'constant',
+                itemclick: false,
+                itemdoubleclick: false,
+                tracegroupgap: 10,
+                traceorder: 'normal',
+                font: {
+                    family: 'Arial, sans-serif',
+                    size: 12,
+                    color: '#000'
+                },
+                bgcolor: '#E2E2E2'
+            }
+        };
+
+        Plotly.newPlot('strikesAbAndStrikeDefScatterplot', trace, layout);
+    }
+
+    function updateTakedownsDefAndNameBarChart(filtered_data) {
+        var barData = [{
+            x: filtered_data.map(fighter => fighter.rank + ": " + fighter.name),
+            y: filtered_data.map(fighter => fighter.takedowns_defended),
+            type: 'bar'
+        }];
+
+        var layout = {
+            title: "Takedowns Defended and Rank",
+            xaxis: {
+                title: 'Rank: Name',
+                tickangle: -25,
+                automargin: true, // Automatically adjust margin
+            },
+            yaxis: {
+                title: 'Takedowns Defended (%)',
+                automargin: true,
+            }
+        };
+
+        Plotly.newPlot('takedownsDefAndNameBarChart', barData, layout);
+    }
+    // Initial plot
+    updateCharts();
+</script>
+
+{% endblock %}
